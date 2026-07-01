@@ -55,7 +55,7 @@ export default function Experience() {
     <section
       id="experience"
       ref={ref}
-      className="reveal mx-auto max-w-6xl px-6 py-24"
+      className="reveal mx-auto max-w-6xl px-6 py-20"
     >
       <h2 className="mb-12 font-mono text-xl text-text">
         <span className="text-green">&gt; </span>Mission Log

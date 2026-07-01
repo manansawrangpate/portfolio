@@ -61,7 +61,7 @@ export default function About() {
     <section
       id="about"
       ref={ref}
-      className="reveal mx-auto max-w-6xl px-6 py-24"
+      className="reveal mx-auto max-w-6xl px-6 py-20"
     >
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         {/* Left — About */}
