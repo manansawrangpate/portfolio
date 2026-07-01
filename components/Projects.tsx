@@ -44,7 +44,7 @@ export default function Projects() {
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
       <h2 className="mb-10 font-display text-2xl font-semibold text-text">
-        <span className="font-mono text-green"># </span>Featured Projects
+        Selected Projects
       </h2>
 
       <div className="grid gap-6 md:grid-cols-3">

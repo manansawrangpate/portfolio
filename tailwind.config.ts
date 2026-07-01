@@ -15,6 +15,9 @@ const config: Config = {
         blue: 'var(--blue)',
         text: 'var(--text)',
         muted: 'var(--muted)',
+        purple: 'var(--purple)',
+        yellow: 'var(--yellow)',
+        pink: 'var(--pink)',
       },
       fontFamily: {
         display: ['var(--font-space-grotesk)', 'sans-serif'],

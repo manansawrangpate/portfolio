@@ -4,47 +4,45 @@ import { useReveal } from '@/lib/hooks';
 
 interface Entry {
   company: string;
+  team: string;
   role: string;
   date: string;
+  duration: string;
   location?: string;
   current?: boolean;
-  lines: string[];
+  summary: string;
 }
 
 const ENTRIES: Entry[] = [
   {
     company: 'Hedgehog Technologies',
+    team: 'Motor Control Firmware Team',
     role: 'Embedded Software Engineering Intern',
     date: 'May 2026 – Present',
+    duration: '2 mo',
     location: 'Burnaby, BC',
     current: true,
-    lines: [
-      'Developed embedded C firmware for virtual EEPROM on NXP S32K144 via internal flash HAL, eliminating physical EEPROM from the board design',
-      'Brought up 2 FOC motor controller boards — characterized 3-phase SVPWM waveforms (0–4000/24V & 0–7500 RPM/48V) via oscilloscope and built a validation test plan',
-      'Diagnosed repeated SPI bus faults to a MOSI-CLK short on the motor driver IC by probing MOSI, MISO, CS, CLK and resolving via component replacement',
-      'Traced bring-up failure modes (bootstrap capacitor sizing, failed MOSFETs) across 3 boards through Altium schematics; documented modifications for board status tracking',
-    ],
+    summary:
+      "Currently building embedded C firmware for motor controller boards on the NXP S32K144. Day-to-day is a mix of hardware bring-up and debugging — characterizing 3-phase SVPWM waveforms with an oscilloscope, tracing SPI bus faults down to component-level shorts, and diagnosing bring-up failures across board revisions through Altium schematics. One of my first shipped pieces was virtual EEPROM mapped to internal flash, which let the team eliminate a physical EEPROM chip from the board design entirely.",
   },
   {
     company: 'York Region',
+    team: 'Process Engineering Team',
     role: 'Process Engineering Intern',
     date: 'May 2025 – April 2026',
+    duration: '11 mo',
     location: 'Newmarket, ON',
-    lines: [
-      'Built a two-stage Python classifier (keyword filter + TF-IDF/Complement Naive Bayes) to triage 4,000–5,000 monthly operator logs; 100% issue recall on validation, 55% manual review reduction',
-      'Derived geometric volume models for septage tanks from structural drawings, with a linearized Excel approximation for SCADA integration — live KPIs to ±0.1 m³ accuracy',
-      'Built Excel pump cycle models from indirect operational data, informing EQ tank sizing and saving $18K annually',
-      'Produced 5+ P&IDs and process schematics in Bluebeam/Visio with As-Built revisions from onsite inspections',
-    ],
+    summary:
+      "Spent nearly a year embedded in the process engineering team at a regional wastewater facility. I built a two-stage Python ML pipeline (TF-IDF + Complement Naive Bayes) to triage thousands of monthly operator logs — 100% issue recall on validation and a 55% cut in manual review time. Beyond the ML work, I derived geometric volume models for SCADA integration, modelled pump cycles from indirect operational data to inform equipment sizing, and produced P&IDs and As-Built schematics from onsite inspections. It was a good introduction to how engineering decisions ripple through large infrastructure systems.",
   },
   {
     company: 'University of Toronto — UTWind',
+    team: 'Aerodynamics Sub-Team',
     role: 'Aerodynamics Lead',
     date: 'Sept 2023 – June 2025',
-    lines: [
-      'Led a 10-member aerodynamics sub-team in iterative CFD optimization of VAWT blade profiles using ANSYS Fluent and Discovery',
-      '1st place at the 2024 International Small Wind Turbine Competition — blade selection informed by team\'s CFD results',
-    ],
+    duration: '1 yr 9 mo',
+    summary:
+      "Led a 10-person aerodynamics sub-team on UofT's competition wind turbine team. We ran iterative CFD campaigns in ANSYS Fluent and Discovery to optimize VAWT blade profiles across multiple design cycles — and the blade geometry we selected contributed to a 1st place finish at the 2024 International Small Wind Turbine Competition. It was my first experience leading a technical team, which meant staying hands-on with simulation while coordinating across a larger project and competition timeline.",
   },
 ];
 
@@ -57,51 +55,42 @@ export default function Experience() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
-      <h2 className="mb-12 font-mono text-xl text-text">
-        <span className="text-green">&gt; </span>Mission Log
+      <h2 className="mb-12 font-display text-2xl font-semibold text-text">
+        Professional Experience
       </h2>
 
       <div className="relative ml-2 border-l border-border pl-8">
         {ENTRIES.map((entry, i) => (
-          <div key={entry.company} className={i === ENTRIES.length - 1 ? '' : 'mb-12'}>
-            {/* Node on the timeline */}
+          <div key={entry.company} className={i === ENTRIES.length - 1 ? '' : 'mb-14'}>
+            {/* Timeline node */}
             <span
               aria-hidden="true"
               className={`absolute -left-[5px] h-2.5 w-2.5 rounded-full ${
                 entry.current ? 'bg-green' : 'bg-muted'
               }`}
               style={{
-                boxShadow: entry.current
-                  ? '0 0 8px rgba(0,200,150,0.6)'
-                  : 'none',
+                boxShadow: entry.current ? '0 0 8px rgba(79,195,247,0.7)' : 'none',
               }}
             />
 
-            {/* Header */}
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-[15px] font-medium text-text">
-                {entry.company}
-              </span>
-              <span className="font-mono text-[13px] text-green">
-                {entry.role}
-              </span>
+            {/* Company + team */}
+            <div className="mb-1">
+              <span className="text-base font-semibold text-text">{entry.company}</span>
+              <span className="ml-2 font-mono text-xs text-muted">{entry.team}</span>
+            </div>
+
+            {/* Role · date · duration */}
+            <div className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span className="font-mono text-[13px] text-green">{entry.role}</span>
               <span className="font-mono text-xs text-muted">
-                {entry.date}{entry.location ? ` · ${entry.location}` : ''}
+                · {entry.date}{entry.location ? ` · ${entry.location}` : ''} · <span className="text-muted">({entry.duration})</span>
               </span>
             </div>
 
-            {/* Body — commented code lines */}
-            <ul className="mt-3 space-y-1.5">
-              {entry.lines.map((line) => (
-                <li
-                  key={line}
-                  className="font-mono text-[13px] leading-6 text-muted"
-                >
-                  <span className="text-border">// </span>
-                  {line}
-                </li>
-              ))}
-            </ul>
+            {/* Narrative */}
+            <p className="max-w-2xl text-sm leading-7 text-muted">
+              {entry.summary}
+            </p>
           </div>
         ))}
       </div>

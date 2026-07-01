@@ -1,9 +1,12 @@
-type DotColor = 'green' | 'blue' | 'white';
+type DotColor = 'green' | 'blue' | 'white' | 'purple' | 'yellow' | 'pink';
 
 const DOT_CLASS: Record<DotColor, string> = {
   green: 'bg-green',
   blue: 'bg-blue',
   white: 'bg-text',
+  purple: 'bg-purple',
+  yellow: 'bg-yellow',
+  pink: 'bg-pink',
 };
 
 export default function SkillGroup({

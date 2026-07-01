@@ -63,7 +63,7 @@ export default function Contact() {
             {...(external
               ? { target: '_blank', rel: 'noopener noreferrer' }
               : {})}
-            className="group inline-flex items-center gap-2 rounded-full border border-green px-5 py-2.5 text-sm font-medium text-green transition-colors duration-200 hover:bg-green hover:text-[#06241d]"
+            className="group inline-flex items-center gap-2 rounded-full border border-green px-5 py-2.5 text-sm font-medium text-green transition-colors duration-200 hover:bg-green hover:text-[#1e1e1e]"
           >
             <Icon />
             {label}

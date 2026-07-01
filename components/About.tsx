@@ -5,51 +5,55 @@ import { useReveal } from '@/lib/hooks';
 
 const SKILL_GROUPS = [
   {
-    label: 'Hardware & Firmware',
+    label: 'Robotics & Autonomy',
     dot: 'green' as const,
     skills: [
-      'STM32',
-      'NXP S32K144',
-      'SPI',
-      'CAN',
-      'I2C',
-      'UART',
-      'ADC',
-      'PWM',
-      'SVPWM',
-      'FOC',
-      'Eagle PCB',
-      'Altium',
-      'PSpice',
+      'ROS2 Jazzy', 'ROS1', 'Gazebo Harmonic', 'TurtleBot3',
+      'Motion Planning', 'Bayesian Filtering', 'Sensor Fusion',
+      'Localization', 'State Machines', 'SLAM',
     ],
   },
   {
-    label: 'Software & Autonomy',
+    label: 'Embedded & Firmware',
     dot: 'blue' as const,
     skills: [
-      'ROS2 (Jazzy)',
-      'ROS1',
-      'C/C++',
-      'Python',
-      'Linux',
-      'Gazebo',
-      'Bayesian Filtering',
-      'Motion Planning',
-      'Multithreading',
-      'MATLAB/Simulink',
+      'Embedded C/C++', 'STM32', 'NXP S32K144', 'SPI', 'I2C', 'UART', 'CAN',
+      'ADC', 'PWM', 'SVPWM', 'FOC', 'Virtual EEPROM', 'Flash HAL',
+      'IMU / DMP', 'PI Control', 'Motor Control',
     ],
   },
   {
-    label: 'Tools & Infra',
+    label: 'Electronics & PCB',
+    dot: 'purple' as const,
+    skills: [
+      'EAGLE PCB', 'Altium', 'PSpice', 'Op-Amp Design', 'Active Filters',
+      'LPF Design', 'Current Sensing', '3-Phase Inverter',
+      'Oscilloscope', 'Signal Probing', 'Soldering',
+    ],
+  },
+  {
+    label: 'Software & Algorithms',
+    dot: 'yellow' as const,
+    skills: [
+      'Python', 'C/C++', 'MATLAB / Simulink', 'Linux', 'Bash',
+      'Multithreading', 'TF-IDF', 'Naive Bayes / NLP', 'Git',
+    ],
+  },
+  {
+    label: 'Mechanical & CAD',
+    dot: 'pink' as const,
+    skills: [
+      'Fusion 360', 'ANSYS Fluent', 'ANSYS Discovery',
+      'CFD Optimization', 'VAWT Aerodynamics',
+      'Mechanical Assembly', 'Bluebeam', 'Visio',
+    ],
+  },
+  {
+    label: 'Dev Tools & Platforms',
     dot: 'white' as const,
     skills: [
-      'Git',
-      'Bash',
-      'Visual Studio',
-      'S32K IDE',
-      'Oscilloscope',
-      'Signal Probing',
-      'Soldering',
+      'Git', 'VS Code', 'Visual Studio', 'S32K Design Studio',
+      'Linux CLI', 'Excel Modelling', 'Bluebeam / Visio',
     ],
   },
 ];
@@ -63,44 +67,47 @@ export default function About() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
-      <div className="grid gap-12 md:grid-cols-2 md:gap-16">
-        {/* Left — About */}
-        <div>
-          <h2 className="mb-6 font-mono text-sm text-green">&lt;AboutMe/&gt;</h2>
-          <div className="space-y-4 text-base leading-7 text-muted">
-            <p>
-              I&apos;m a robotics engineering student in the Engineering Science
-              program at the University of Toronto, with a minor in Engineering
-              Business (Rotman). I&apos;ve been awarded the Alexander Rutherford
-              and Wallberg scholarships, and have led an international
-              competition team as Aerodynamics Lead for UTWind.
-            </p>
-            <p>
-              My work lives close to the metal: embedded C/C++, field-oriented
-              control (FOC) for brushless motors, ROS2-based autonomy, and
-              sensor fusion. I like the moment where firmware, control theory,
-              and real hardware have to agree with each other simultaneously.
-            </p>
-            <p>
-              I&apos;m building toward robotics and autonomous systems that
-              improve quality of life — choosing problems by their proximity to
-              real impact, their safety and efficiency stakes, and their
-              specificity to a domain over generic demos.
-            </p>
-          </div>
+      {/* Bio */}
+      <div className="mb-14 max-w-2xl">
+        <h2 className="mb-6 font-display text-2xl font-semibold text-text">About Me</h2>
+        <div className="space-y-4 text-base leading-7 text-text">
+          <p>
+            I&apos;m a third-year Engineering Science student at the University of
+            Toronto, specialising in Robotics Engineering with a minor in
+            Engineering Business (Rotman). I&apos;ve been lucky to receive the
+            Alexander Rutherford and Wallberg scholarships, and I spent two years
+            leading UTWind&apos;s aerodynamics sub-team to a first-place finish at
+            an international competition.
+          </p>
+          <p>
+            My work tends to live close to the hardware — embedded C on ARM
+            Cortex-M, field-oriented motor control, ROS2-based autonomy, and the
+            kind of debugging that requires an oscilloscope and a lot of patience.
+            I like problems where firmware, control theory, and real hardware all
+            have to agree with each other at the same time.
+          </p>
+          <p>
+            I&apos;m building toward robotics and autonomous systems that improve
+            quality of life in measurable ways. I pick problems based on their
+            proximity to real impact, their safety stakes, and how specific they
+            are to a domain — rather than how impressive they sound in a demo.
+          </p>
         </div>
+      </div>
 
-        {/* Right — Skills */}
-        <div className="space-y-8">
-          {SKILL_GROUPS.map((group) => (
-            <SkillGroup
-              key={group.label}
-              label={group.label}
-              dot={group.dot}
-              skills={group.skills}
-            />
-          ))}
-        </div>
+      {/* Skills */}
+      <h3 className="mb-8 font-mono text-sm uppercase tracking-wider text-muted">
+        Skills &amp; Technologies
+      </h3>
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {SKILL_GROUPS.map((group) => (
+          <SkillGroup
+            key={group.label}
+            label={group.label}
+            dot={group.dot}
+            skills={group.skills}
+          />
+        ))}
       </div>
     </section>
   );

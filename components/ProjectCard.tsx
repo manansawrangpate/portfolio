@@ -31,7 +31,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const linkHref = project.github ?? project.demo;
 
   return (
-    <article className="group relative flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(0,200,150,0.10)]">
+    <article className="group relative flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(79,195,247,0.12)]">
       {/* Top tag bar + icons */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <span className="font-mono text-[11px] uppercase tracking-wide text-muted">

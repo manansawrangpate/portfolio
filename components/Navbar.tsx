@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
 const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: `${BASE}/` },
+  { label: 'Projects', href: `${BASE}/#projects` },
+  { label: 'About', href: `${BASE}/about/` },
+  { label: 'Experience', href: `${BASE}/#experience` },
+  { label: 'Contact', href: `${BASE}/#contact` },
 ];
 
 const SOCIALS = [
@@ -59,34 +61,43 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        {/* Nav links */}
-        <ul className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="font-mono text-[13px] text-muted transition-colors hover:text-green"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/* Full name — left */}
+        <a
+          href="#home"
+          className="font-display text-sm font-semibold text-text transition-colors hover:text-green"
+        >
+          Manan Sawrangpate
+        </a>
 
-        {/* Social icons */}
-        <div className="flex items-center gap-4">
-          {SOCIALS.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="text-muted transition-colors hover:text-green"
-            >
-              {s.icon}
-            </a>
-          ))}
+        {/* Nav links + social icons — right */}
+        <div className="flex items-center gap-6">
+          <ul className="hidden items-center gap-6 md:flex">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="font-mono text-[13px] text-muted transition-colors hover:text-green"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-4">
+            {SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="text-muted transition-colors hover:text-green"
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
     </header>
