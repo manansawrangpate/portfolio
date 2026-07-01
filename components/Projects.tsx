@@ -5,16 +5,11 @@ import ProjectCard, { Project } from './ProjectCard';
 import ProjectModal from './ProjectModal';
 import { useReveal } from '@/lib/hooks';
 
-// ─── HOW TO ADD CONTENT TO PROJECT MODALS ────────────────────────────────────
-//
-// IMAGES: Drop .jpg/.png files into public/projects/ and add paths like:
-//   images: ['projects/robot-demo.jpg', 'projects/robot-map.png']
-//
-// LINKS: Add YouTube demos, Google Drive reports, GitHub repos etc.:
-//   links: [
-//     { label: 'Demo Video', href: 'https://youtube.com/...' },
-//     { label: 'Final Report', href: 'https://drive.google.com/...' },
-//   ]
+// ─── HOW TO ADD IMAGES TO PROJECT MODALS ─────────────────────────────────────
+// 1. Create the folder:  public/projects/
+// 2. Drop your .jpg/.png files in there
+// 3. Add paths to the images[] array below, e.g.:
+//      images: ['projects/robot-front.jpg', 'projects/robot-map.png']
 // ─────────────────────────────────────────────────────────────────────────────
 
 const PROJECTS: Project[] = [
@@ -22,54 +17,71 @@ const PROJECTS: Project[] = [
     title: 'Autonomous Mail Delivery Robot',
     tools: ['ROS1/2', 'Python', 'Gazebo Harmonic', 'TurtleBot3 Waffle Pi'],
     description:
-      'Autonomous indoor mail delivery on TurtleBot3 using a 12-state Bayesian localization filter and corridor-aware state machine. Validated across 5 live hardware trials and ported to Gazebo Harmonic simulation.',
-    github: 'https://github.com/manansawrangpate',
+      'TurtleBot3 Waffle Pi that autonomously navigates a multi-room office floor and delivers mail, using a 12-state Bayesian localization filter with a corridor-freeze strategy. Validated across 5 hardware trials, then ported to ROS2 Jazzy / Gazebo Harmonic.',
+    github: 'https://github.com/manansawrangpate/Bayesian-Localization-Robot/tree/main',
     details: {
       overview:
-        `Built as a final project, this system autonomously navigates a multi-room office floor and delivers mail to target rooms using a TurtleBot3 Waffle Pi equipped with a 2D LiDAR and RGB camera.
+`The project started with a deceptively simple brief: build a TurtleBot3 Waffle Pi that could autonomously navigate a multi-room office layout and deliver mail to specific rooms — using nothing but a 2D LiDAR and an RGB camera. No GPS, no pre-built point cloud, just probabilistic reasoning over a hand-crafted 12-state map.
 
-The navigation stack is built around a 12-state Bayesian localization filter that estimates the robot's position from LiDAR scan probabilities and colour observations. A corridor-freeze state machine prevents mid-corridor turns — the primary cause of navigation failure in early trials — by locking heading until the robot clears a corridor threshold.
+The core of the navigation stack is a Bayesian localization filter. At each timestep, it predicts the robot's state using odometry, then updates belief by correlating LiDAR scan match probabilities and colour patch observations against the map. The first critical problem surfaced early: when a colour observation was misclassified — which happens more than expected under real office lighting — the filter would permanently eliminate that state's belief. The fix was a belief floor of 0.01 applied after every update cycle. A small change, but it meant the filter could recover from a bad observation rather than collapsing irreversibly into a wrong state.
 
-Validated across 5 complete hardware delivery runs achieving 60% full 3-office delivery completion and >90% state confidence within 5 corridor observations. The stack was later ported to Gazebo Harmonic simulation, requiring camera colour classification threshold recalibration to match the Ogre2 renderer's output characteristics.`,
-      // Drop images into public/projects/ and list filenames below:
+The second problem was corridor traversal. The Bayesian prediction step advances belief every cycle, which meant a robot crossing a long corridor might double-advance into the next office — once on entry, once mid-traverse. We solved this with a corridor-freeze strategy: prediction is suppressed during mid-corridor segments and fires exactly once on room-patch entry, keeping state transitions tight regardless of traversal speed.
+
+Delivery runs as a two-phase state machine. The first phase is an exploration lap to build initial confidence across all 12 states; delivery is then gated on 8 consecutive frames where the MAP estimate matches the target room. That threshold was found empirically — too low caused premature triggering and missed deliveries, too high caused timeouts.
+
+After validating across 5 complete hardware trials and achieving 60% full 3-office delivery completion, we ported the entire stack to ROS2 Jazzy running in Gazebo Harmonic. The port introduced a non-trivial calibration problem: Gazebo's Ogre2 renderer produces colour outputs different enough from a real camera that all colour classification thresholds had to be recalibrated from scratch — even though the underlying filter logic was identical.`,
+      // Drop project images into public/projects/ and list filenames below:
       images: [],
-      // Add demo video, final report, GitHub repo etc. below:
-      links: [],
+      links: [
+        { label: 'Demo Video', href: 'https://www.youtube.com/watch?v=Y-dlipkhMvs&t=11s' },
+        { label: 'Final Report', href: 'https://github.com/manansawrangpate/Bayesian-Localization-Robot/blob/main/docs/final_report.pdf' },
+      ],
     },
   },
   {
     title: 'Dynamic Stability Cart',
-    tools: ['STM32', 'C++', 'ICM-20948 IMU', 'SPI', 'PI Control'],
+    tools: ['STM32', 'C++', 'ICM-20948 IMU', 'SPI', 'Fusion 360', 'PI Control'],
     description:
-      'A self-balancing cart for rope-bridge traversal using an ICM-20948 IMU over SPI and a servo-actuated rod. Quaternion fusion offloaded to the sensor\'s onboard DMP; a tuned PI controller achieves <3° steady-state error.',
+      'Autonomous two-wheeled cart that traverses a rope-suspended bridge using a servo-actuated balancing rod and STM32 PI control. Offloading quaternion fusion to the IMU\'s onboard DMP cut control-loop latency from ~5 s to <100 ms, achieving <3° steady-state error.',
     details: {
       overview:
-        `Designed to autonomously balance on and traverse a rope bridge, this cart uses a servo-actuated balancing rod driven by a PI controller running on an STM32 NUCLEO-G070RB.
+`The brief was deceptively simple: build a cart that can cross a rope-suspended bridge. In practice, that meant designing a system that could balance a two-wheeled vehicle on a 1 m single-axis rope rail while actually moving forward — a classic inverted-pendulum problem, but on an inherently compliant, swaying bridge rather than a rigid surface.
 
-Orientation comes from an ICM-20948 9-DoF IMU connected over SPI. To minimize MCU processing load and latency, quaternion sensor fusion is offloaded to the IMU's onboard Digital Motion Processor (DMP), delivering ready-to-use orientation data at the SPI interface rather than requiring the MCU to run Madgwick or Mahony filters in software.
+The hardware core is an STM32 NUCLEO-G070RB driving a servo-actuated balancing rod, with orientation provided by an ICM-20948 9-DoF IMU over SPI. Our first firmware revision read raw accelerometer and gyroscope data and ran a Madgwick filter on the MCU to compute pitch. It worked — but the latency was brutal. Pitch corrections were arriving with up to 5 seconds of lag, causing tip-overs before the servo could react. The fix was offloading quaternion fusion entirely to the ICM-20948's onboard Digital Motion Processor (DMP). The DMP outputs ready-to-use quaternions directly at the SPI interface, cutting control-loop latency to under 100 ms — a greater than 95% reduction — and tip-overs from delayed correction stopped immediately.
 
-The PI controller was tuned iteratively — early D-term attempts introduced oscillations across both dual- and single-anchor bridge configurations, leading to a final Kp=1.5, Ki=0.02 parameter set. The system achieves <3° steady-state angle error and >95% reduction in stabilization latency (from ~5 s to <100 ms) vs. software-only sensor fusion.`,
-      // Drop images into public/projects/ and list filenames below:
+Control is a PI loop running on the MCU. We started with a full PID, but the derivative term introduced sustained oscillations across both bridge configurations — the rope's compliance amplified Kd's response to high-frequency disturbances in a way that was difficult to tune out. Dropping D and retuning to Kp=1.5, Ki=0.02 gave clean convergence to less than 3° steady-state error.
+
+The chassis went through two full Fusion 360 design iterations. The first was an enclosed high-wall box structure — rigid, but too heavy and with a centre of mass too high for reliable single-axis balancing. The second moved to an open multi-level layout: heavy components mounted low, electronics elevated, and strict longitudinal symmetry enforced to keep the CoM on the rail axis. That symmetry turned out to be more important than expected — even a few millimetres of lateral offset introduced a lean bias the PI controller couldn't fully reject.
+
+Validation progressed from a dual-anchor string (more forgiving, less compliance) to a single-anchor attachment (much more sway and disturbance). Final testing confirmed repeatable autonomous bridge traversal under single-anchor conditions — the harder of the two configurations.`,
+      // Drop project images into public/projects/ and list filenames below:
       images: [],
-      // Add demo video, project report, GitHub repo etc. below:
-      links: [],
+      links: [
+        { label: 'Cart Overview', href: 'https://youtube.com/shorts/9KmyEsKY3r4' },
+        { label: 'Demo Videos', href: 'https://drive.google.com/drive/folders/1WdUrfUVB392MwbkiYOgDXzXlVdmxJXj8' },
+        { label: 'Final Report', href: 'https://drive.google.com/file/d/1eHVN0l3nveRTs42LLFuMdob11xppMMwQ/view' },
+      ],
     },
   },
   {
     title: 'Current Sensing PCB',
-    tools: ['EAGLE PCB', 'PSpice', 'STM32G051', 'Op-Amp Design'],
+    tools: ['EAGLE PCB', 'PSpice', 'STM32G051', 'Op-Amp Design', 'Active LPF'],
     description:
-      'A custom 2-layer PCB conditioning a shunt-resistor signal for STM32 ADC input, with a 3rd-order active LPF providing −35 dB of switching-noise rejection. Designed in EAGLE, simulated in PSpice, validated with calibration firmware.',
+      'Custom 2-layer PCB for a DC power supply current-sense path — non-inverting summing op-amp topology maps 0–3.5 A to STM32 ADC range, with a 3rd-order active Butterworth LPF at 5 kHz providing −35 dB switching-noise rejection. R²=0.999 calibration linearity.',
     details: {
       overview:
-        `Designed a complete current sensing solution for STM32-based motor control applications, from analog front-end design through PCB layout and firmware validation.
+`This project came from a real gap in our adjustable DC power supply: it had no visibility into how much current was actually flowing to the load. We needed a sense circuit that could accurately map 0–3.5 A to a voltage range the STM32's ADC could read — without being corrupted by the switching noise the supply's regulator generates on every cycle.
 
-The analog front end uses a non-inverting summing amplifier with an op-amp buffer offset stage, mapping a 0–3.5 A shunt signal to the STM32G051 ADC's 0.25–3.3 V input range. A 3rd-order active Butterworth LPF at 5 kHz provides −35 dB attenuation of PWM switching noise.
+The analog front end uses a low-side shunt resistor with a non-inverting summing amplifier topology. An op-amp buffer offset stage shifts the shunt differential voltage into the STM32G051 ADC's 0.25–3.3 V input window — the 0.25 V floor keeps the signal clear of ground noise at the low end, and the 3.3 V ceiling leaves headroom before clipping. Getting the gain and offset biasing right took several PSpice iterations before the schematic was ready for layout.
 
-Designed in EAGLE as a 2-layer board with a solid ground pour and short high-current trace routing, then simulated in PSpice prior to fabrication to verify frequency response. Calibration firmware was developed for end-to-end validation using a rotary encoder for input control and an LCD display for real-time readout — achieving R²=0.999 linearity across the full measurement range.`,
-      // Drop images into public/projects/ (PCB layout, oscilloscope traces, etc.):
+Switching noise was the main adversary. The regulator generates harmonic content above 5 kHz that, if it reaches the ADC, causes aliasing and false current readings. We designed a 3rd-order active Butterworth low-pass filter at 5 kHz — providing −35 dB attenuation at the switching frequency. The choice of 3rd order over a simpler 1st or 2nd order was deliberate: we needed the steeper roll-off to achieve sufficient attenuation within a tight frequency band around the switching fundamental.
+
+Translating the schematic to a 2-layer PCB in EAGLE meant thinking carefully about current paths. High-current traces — the shunt and supply return — were kept short and wide; the analog signal path was routed away from those traces, with a solid ground pour providing shielding between them. Component keepout regions around the op-amp inputs prevented accidental coupling from adjacent leads.
+
+After assembly and soldering, we built STM32G051 calibration firmware that maps ADC readings to load current via a lookup table, achieving R²=0.999 linearity across the full 0–3.5 A range. A rotary encoder sets the target output and an LCD shows real-time voltage and current. Oscilloscope measurements under step-load conditions confirmed −35 dB attenuation at 5 kHz and under 250 mV output noise. We did catch one discrepancy: a ground-related ripple appeared near the filter cutoff that wasn't present in simulation, traceable to a shared ground return path between the analog and digital sections — a useful lesson for future mixed-signal PCB layout.`,
+      // Drop PCB layout photos, oscilloscope screenshots etc. into public/projects/:
       images: [],
-      // Add EAGLE files (Google Drive), oscilloscope data, report etc. below:
+      // No external links yet — add Google Drive, GitHub etc. here when ready:
       links: [],
     },
   },
