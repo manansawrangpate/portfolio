@@ -1,7 +1,55 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import SkillGroup from './SkillGroup';
 import { useReveal } from '@/lib/hooks';
+
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+const PHOTOS = [
+  { src: `${BASE}/Biking.jpeg`, alt: 'Biking in the Rockies' },
+  { src: `${BASE}/bigchair.jpeg`, alt: 'Travelling' },
+  { src: `${BASE}/StarWars.jpg`, alt: 'At a Star Wars exhibit' },
+];
+
+function PhotoShuffle() {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIdx(i => (i + 1) % PHOTOS.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-surface">
+      {PHOTOS.map((photo, i) => (
+        <img
+          key={photo.src}
+          src={photo.src}
+          alt={photo.alt}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            i === idx ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+      {/* Dot indicators */}
+      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+        {PHOTOS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIdx(i)}
+            aria-label={`Photo ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const SKILL_GROUPS = [
   {
@@ -67,31 +115,46 @@ export default function About() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
-      {/* Bio */}
-      <div className="mb-14 max-w-2xl">
-        <h2 className="mb-6 font-display text-2xl font-semibold text-text">About Me</h2>
-        <div className="space-y-4 text-base leading-7 text-text">
+      <h2 className="mb-10 font-display text-2xl font-semibold text-text">About Me</h2>
+
+      {/* Top: bio + photo */}
+      <div className="mb-16 grid gap-10 lg:grid-cols-[1fr_300px]">
+        {/* Left: bio + personal */}
+        <div className="space-y-6 text-base leading-7 text-muted">
           <p>
             I&apos;m a third-year Engineering Science student at the University of
-            Toronto, specialising in Robotics Engineering with a minor in
-            Engineering Business (Rotman). I&apos;ve been lucky to receive the
-            Alexander Rutherford and Wallberg scholarships, and I spent two years
-            leading UTWind&apos;s aerodynamics sub-team to a first-place finish at
-            an international competition.
+            Toronto, majoring in Robotics Engineering with minors in Engineering
+            Business and Artificial Intelligence.
           </p>
           <p>
-            My work tends to live close to the hardware — embedded C on ARM
-            Cortex-M, field-oriented motor control, ROS2-based autonomy, and the
-            kind of debugging that requires an oscilloscope and a lot of patience.
-            I like problems where firmware, control theory, and real hardware all
-            have to agree with each other at the same time.
+            My interests span autonomous systems, hardware, embedded software and
+            firmware, and control theory — all areas that come together in robotics.
+            I&apos;m drawn to building robotic and autonomous systems that make a real
+            difference in human quality of life.
           </p>
+
+          <hr className="border-border" />
+
           <p>
-            I&apos;m building toward robotics and autonomous systems that improve
-            quality of life in measurable ways. I pick problems based on their
-            proximity to real impact, their safety stakes, and how specific they
-            are to a domain — rather than how impressive they sound in a demo.
+            I grew up in Alberta and developed a love for hiking and biking in the
+            Rockies. I&apos;ve been lucky to travel broadly and pick up experiences along
+            the way. Outside of engineering, I play guitar — you can listen to some
+            recordings on my{' '}
+            <a
+              href="https://www.youtube.com/@sawrangpatesounds"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green underline-offset-4 hover:underline"
+            >
+              YouTube channel
+            </a>
+            .
           </p>
+        </div>
+
+        {/* Right: photo shuffle */}
+        <div className="flex flex-col gap-4">
+          <PhotoShuffle />
         </div>
       </div>
 
