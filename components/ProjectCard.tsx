@@ -6,94 +6,64 @@ function GithubIcon() {
   );
 }
 
-function ExternalIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
-  );
+export interface ProjectDetails {
+  overview: string;
+  images: string[];
+  links: { label: string; href: string }[];
 }
 
 export interface Project {
   title: string;
-  tags: string;
-  platform: string;
+  tools: string[];
   description: string;
-  metric: string;
-  badges: string[];
   github?: string;
-  demo?: string;
+  details: ProjectDetails;
 }
 
-export default function ProjectCard({ project }: { project: Project }) {
-  const linkHref = project.github ?? project.demo;
-
+export default function ProjectCard({
+  project,
+  onOpenDetails,
+}: {
+  project: Project;
+  onOpenDetails: () => void;
+}) {
   return (
-    <article className="group relative flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(79,195,247,0.12)]">
-      {/* Top tag bar + icons */}
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <span className="font-mono text-[11px] uppercase tracking-wide text-muted">
-          [{project.tags}]
-        </span>
-        <div className="flex shrink-0 items-center gap-2 text-muted">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.title} on GitHub`}
-              className="relative z-10 transition-colors hover:text-green"
-            >
-              <GithubIcon />
-            </a>
-          )}
-          {project.demo && (
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.title} demo`}
-              className="relative z-10 transition-colors hover:text-green"
-            >
-              <ExternalIcon />
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* Title — stretched link makes whole card clickable */}
-      <h3 className="font-display text-lg font-semibold text-text">
-        {linkHref ? (
+    <article className="group flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(79,195,247,0.12)]">
+      {/* Title row */}
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <h3 className="font-display text-lg font-semibold text-text leading-snug">
+          {project.title}
+        </h3>
+        {project.github && (
           <a
-            href={linkHref}
+            href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="after:absolute after:inset-0 after:content-[''] focus:outline-none"
+            aria-label={`${project.title} on GitHub`}
+            className="shrink-0 text-muted transition-colors hover:text-green"
           >
-            {project.title}
+            <GithubIcon />
           </a>
-        ) : (
-          project.title
         )}
-      </h3>
-      <p className="mt-1 font-mono text-[11px] text-muted">{project.platform}</p>
+      </div>
+
+      {/* Tools */}
+      <p className="font-mono text-[11px] text-muted">
+        {project.tools.join(' · ')}
+      </p>
 
       {/* Description */}
-      <p className="mt-3 text-sm leading-6 text-muted">{project.description}</p>
+      <p className="mt-3 flex-1 text-sm leading-6 text-muted">
+        {project.description}
+      </p>
 
-      {/* Metric callout */}
-      <p className="mt-4 text-sm font-medium text-green">↳ {project.metric}</p>
-
-      {/* Badges */}
-      <div className="mt-auto flex flex-wrap gap-2 pt-5">
-        {project.badges.map((badge) => (
-          <span key={badge} className="badge">
-            {badge}
-          </span>
-        ))}
-      </div>
+      {/* View Details */}
+      <button
+        onClick={onOpenDetails}
+        className="mt-5 self-start font-mono text-xs text-green transition-colors hover:text-text"
+      >
+        + View Details
+      </button>
     </article>
   );
 }
