@@ -28,8 +28,10 @@ export interface Project {
 }
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const linkHref = project.github ?? project.demo;
+
   return (
-    <article className="group flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_20px_rgba(0,200,150,0.06)]">
+    <article className="group relative flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(0,200,150,0.10)]">
       {/* Top tag bar + icons */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <span className="font-mono text-[11px] uppercase tracking-wide text-muted">
@@ -42,7 +44,7 @@ export default function ProjectCard({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} on GitHub`}
-              className="transition-colors hover:text-green"
+              className="relative z-10 transition-colors hover:text-green"
             >
               <GithubIcon />
             </a>
@@ -53,7 +55,7 @@ export default function ProjectCard({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} demo`}
-              className="transition-colors hover:text-green"
+              className="relative z-10 transition-colors hover:text-green"
             >
               <ExternalIcon />
             </a>
@@ -61,9 +63,20 @@ export default function ProjectCard({ project }: { project: Project }) {
         </div>
       </div>
 
-      {/* Title */}
+      {/* Title — stretched link makes whole card clickable */}
       <h3 className="font-display text-lg font-semibold text-text">
-        {project.title}
+        {linkHref ? (
+          <a
+            href={linkHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="after:absolute after:inset-0 after:content-[''] focus:outline-none"
+          >
+            {project.title}
+          </a>
+        ) : (
+          project.title
+        )}
       </h3>
       <p className="mt-1 font-mono text-[11px] text-muted">{project.platform}</p>
 

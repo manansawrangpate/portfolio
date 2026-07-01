@@ -26,7 +26,10 @@ export default function Hero() {
             <span className="block text-3xl font-medium text-text sm:text-4xl">
               Hi, I&apos;m
             </span>
-            <span className="relative block text-4xl font-bold tracking-[-0.02em] text-white sm:text-5xl lg:text-6xl">
+            <span
+              className="relative block text-4xl font-bold tracking-[-0.02em] text-white sm:text-5xl lg:text-6xl"
+              style={{ textShadow: '0 0 40px rgba(0,200,150,0.18)' }}
+            >
               {/* subtle radial green glow behind the name */}
               <span
                 aria-hidden="true"
