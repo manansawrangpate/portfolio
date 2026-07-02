@@ -102,7 +102,7 @@ export default function ProjectModal({
                   <img
                     src={imgSrc(src)}
                     alt={caption ?? ''}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 </div>
                 {caption && (
