@@ -68,6 +68,7 @@ Validation progressed from a dual-anchor string (more forgiving, less compliance
     tools: ['EAGLE PCB', 'PSpice', 'STM32G051', 'Op-Amp Design', 'Active LPF'],
     description:
       'Custom 2-layer PCB for a DC power supply current-sense path — non-inverting summing op-amp topology maps 0–3.5 A to STM32 ADC range, with a 3rd-order active Butterworth LPF at 5 kHz providing −35 dB switching-noise rejection. R²=0.999 calibration linearity.',
+    github: 'https://github.com/manansawrangpate/dc-power-supply-current-sense',
     details: {
       overview:
 `This project came from a real gap in our adjustable DC power supply: it had no visibility into how much current was actually flowing to the load. We needed a sense circuit that could accurately map 0–3.5 A to a voltage range the STM32's ADC could read — without being corrupted by the switching noise the supply's regulator generates on every cycle.
@@ -79,9 +80,11 @@ Switching noise was the main adversary. The regulator generates harmonic content
 Translating the schematic to a 2-layer PCB in EAGLE meant thinking carefully about current paths. High-current traces — the shunt and supply return — were kept short and wide; the analog signal path was routed away from those traces, with a solid ground pour providing shielding between them. Component keepout regions around the op-amp inputs prevented accidental coupling from adjacent leads.
 
 After assembly and soldering, we built STM32G051 calibration firmware that maps ADC readings to load current via a lookup table, achieving R²=0.999 linearity across the full 0–3.5 A range. A rotary encoder sets the target output and an LCD shows real-time voltage and current. Oscilloscope measurements under step-load conditions confirmed −35 dB attenuation at 5 kHz and under 250 mV output noise. We did catch one discrepancy: a ground-related ripple appeared near the filter cutoff that wasn't present in simulation, traceable to a shared ground return path between the analog and digital sections — a useful lesson for future mixed-signal PCB layout.`,
-      // Drop PCB layout photos, oscilloscope screenshots etc. into public/projects/:
-      images: [],
-      // No external links yet — add Google Drive, GitHub etc. here when ready:
+      images: [
+        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/PCB_Eagle_layout.png',
+        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Mounted_PCB_photo.png',
+        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Backside_of_PCB.png',
+      ],
       links: [],
     },
   },
