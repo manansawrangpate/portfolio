@@ -35,6 +35,7 @@ export default function ProjectModal({
   }, [onClose]);
 
   const { details } = project;
+  const colClass = details.images.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-16">
@@ -51,7 +52,6 @@ export default function ProjectModal({
 
         {/* Header */}
         <div className="mb-6 flex items-start justify-between gap-4">
-          {/* Title + tools */}
           <div className="min-w-0 flex-1">
             <h2 className="font-display text-2xl font-semibold text-text">
               {project.title}
@@ -60,8 +60,6 @@ export default function ProjectModal({
               {project.tools.join(' · ')}
             </p>
           </div>
-
-          {/* Top-right: quick links + close */}
           <div className="flex shrink-0 items-center gap-3">
             {project.github && (
               <a
@@ -95,26 +93,32 @@ export default function ProjectModal({
           </div>
         </div>
 
+        {/* Images — shown ABOVE the overview text */}
+        {details.images.length > 0 && (
+          <div className={`mb-6 grid gap-3 ${colClass}`}>
+            {details.images.map(({ src, caption }) => (
+              <figure key={src} className="flex flex-col">
+                <img
+                  src={imgSrc(src)}
+                  alt={caption ?? ''}
+                  className="w-full rounded-lg object-cover"
+                />
+                {caption && (
+                  <figcaption className="mt-1.5 text-center text-[10px] italic text-muted">
+                    {caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        )}
+
         {/* Overview */}
         <div className="space-y-4 text-sm leading-7 text-muted">
           {details.overview.split('\n\n').map((para, i) => (
             <p key={i}>{para}</p>
           ))}
         </div>
-
-        {/* Images */}
-        {details.images.length > 0 && (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {details.images.map((src) => (
-              <img
-                key={src}
-                src={imgSrc(src)}
-                alt=""
-                className="w-full rounded-lg object-cover"
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

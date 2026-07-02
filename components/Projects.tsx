@@ -30,8 +30,10 @@ The second problem was corridor traversal. The Bayesian prediction step advances
 Delivery runs as a two-phase state machine. The first phase is an exploration lap to build initial confidence across all 12 states; delivery is then gated on 8 consecutive frames where the MAP estimate matches the target room. That threshold was found empirically — too low caused premature triggering and missed deliveries, too high caused timeouts.
 
 After validating across 5 complete hardware trials and achieving 60% full 3-office delivery completion, we ported the entire stack to ROS2 Jazzy running in Gazebo Harmonic. The port introduced a non-trivial calibration problem: Gazebo's Ogre2 renderer produces colour outputs different enough from a real camera that all colour classification thresholds had to be recalibrated from scratch — even though the underlying filter logic was identical.`,
-      // Drop project images into public/projects/ and list filenames below:
-      images: [],
+      images: [
+        { src: 'IMG_5622.jpeg', caption: 'TurtleBot3 Waffle Pi' },
+        { src: 'track_topology.png', caption: '12-State Office Navigation Map' },
+      ],
       links: [
         { label: 'Demo Video', href: 'https://www.youtube.com/watch?v=Y-dlipkhMvs&t=11s' },
         { label: 'Final Report', href: 'https://github.com/manansawrangpate/Bayesian-Localization-Robot/blob/main/docs/final_report.pdf' },
@@ -54,7 +56,6 @@ Control is a PI loop running on the MCU. We started with a full PID, but the der
 The chassis went through two full Fusion 360 design iterations. The first was an enclosed high-wall box structure — rigid, but too heavy and with a centre of mass too high for reliable single-axis balancing. The second moved to an open multi-level layout: heavy components mounted low, electronics elevated, and strict longitudinal symmetry enforced to keep the CoM on the rail axis. That symmetry turned out to be more important than expected — even a few millimetres of lateral offset introduced a lean bias the PI controller couldn't fully reject.
 
 Validation progressed from a dual-anchor string (more forgiving, less compliance) to a single-anchor attachment (much more sway and disturbance). Final testing confirmed repeatable autonomous bridge traversal under single-anchor conditions — the harder of the two configurations.`,
-      // Drop project images into public/projects/ and list filenames below:
       images: [],
       links: [
         { label: 'Cart Overview', href: 'https://youtube.com/shorts/9KmyEsKY3r4' },
@@ -81,9 +82,9 @@ Translating the schematic to a 2-layer PCB in EAGLE meant thinking carefully abo
 
 After assembly and soldering, we built STM32G051 calibration firmware that maps ADC readings to load current via a lookup table, achieving R²=0.999 linearity across the full 0–3.5 A range. A rotary encoder sets the target output and an LCD shows real-time voltage and current. Oscilloscope measurements under step-load conditions confirmed −35 dB attenuation at 5 kHz and under 250 mV output noise. We did catch one discrepancy: a ground-related ripple appeared near the filter cutoff that wasn't present in simulation, traceable to a shared ground return path between the analog and digital sections — a useful lesson for future mixed-signal PCB layout.`,
       images: [
-        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/PCB_Eagle_layout.png',
-        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Mounted_PCB_photo.png',
-        'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Backside_of_PCB.png',
+        { src: 'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/PCB_Eagle_layout.png', caption: 'PCB Layout in EAGLE' },
+        { src: 'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Mounted_PCB_photo.png', caption: 'Soldered PCB with LCD Display Active' },
+        { src: 'https://raw.githubusercontent.com/manansawrangpate/dc-power-supply-current-sense/main/images/Backside_of_PCB.png', caption: 'PCB Integrated with STM32-based Power Supply' },
       ],
       links: [],
     },

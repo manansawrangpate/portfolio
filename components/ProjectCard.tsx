@@ -6,9 +6,14 @@ function GithubIcon() {
   );
 }
 
+export interface ProjectImage {
+  src: string;
+  caption?: string;
+}
+
 export interface ProjectDetails {
   overview: string;
-  images: string[];
+  images: ProjectImage[];
   links: { label: string; href: string }[];
 }
 
