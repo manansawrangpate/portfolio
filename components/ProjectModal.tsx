@@ -48,19 +48,19 @@ export default function ProjectModal({
       />
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-2xl rounded-2xl border border-border bg-surface p-8">
+      <div className="relative z-10 w-full max-w-5xl rounded-2xl border border-border bg-surface p-10">
 
         {/* Header */}
-        <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="mb-7 flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h2 className="font-display text-2xl font-semibold text-text">
+            <h2 className="font-display text-4xl font-semibold text-text">
               {project.title}
             </h2>
-            <p className="mt-1 font-mono text-xs text-muted">
+            <p className="mt-2 font-mono text-sm text-muted">
               {project.tools.join(' · ')}
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center gap-4">
             {project.github && (
               <a
                 href={project.github}
@@ -78,7 +78,7 @@ export default function ProjectModal({
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[11px] text-muted transition-colors hover:text-green"
+                className="font-mono text-sm text-muted transition-colors hover:text-green"
               >
                 {label} ↗
               </a>
@@ -86,7 +86,7 @@ export default function ProjectModal({
             <button
               onClick={onClose}
               aria-label="Close"
-              className="ml-1 text-xl leading-none text-muted transition-colors hover:text-text"
+              className="ml-1 text-2xl leading-none text-muted transition-colors hover:text-text"
             >
               ✕
             </button>
@@ -95,7 +95,7 @@ export default function ProjectModal({
 
         {/* Images — shown ABOVE the overview text */}
         {details.images.length > 0 && (
-          <div className={`mb-6 grid gap-3 ${colClass}`}>
+          <div className={`mb-7 grid gap-4 ${colClass}`}>
             {details.images.map(({ src, caption }) => (
               <figure key={src} className="flex flex-col">
                 <img
@@ -104,7 +104,7 @@ export default function ProjectModal({
                   className="w-full rounded-lg object-cover"
                 />
                 {caption && (
-                  <figcaption className="mt-1.5 text-center text-[10px] italic text-muted">
+                  <figcaption className="mt-2 text-center text-xs italic text-muted">
                     {caption}
                   </figcaption>
                 )}
