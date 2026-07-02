@@ -6,6 +6,18 @@ function GithubIcon() {
   );
 }
 
+function ReportIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10 9 9 9 8 9" />
+    </svg>
+  );
+}
+
 export interface ProjectImage {
   src: string;
   caption?: string;
@@ -22,6 +34,7 @@ export interface Project {
   tools: string[];
   description: string;
   github?: string;
+  report?: string;
   details: ProjectDetails;
 }
 
@@ -39,17 +52,30 @@ export default function ProjectCard({
         <h3 className="font-display text-lg font-semibold text-text leading-snug">
           {project.title}
         </h3>
-        {project.github && (
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.title} on GitHub`}
-            className="shrink-0 text-muted transition-colors hover:text-green"
-          >
-            <GithubIcon />
-          </a>
-        )}
+        <div className="flex shrink-0 items-center gap-2">
+          {project.report && (
+            <a
+              href={project.report}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} final report`}
+              className="text-muted transition-colors hover:text-green"
+            >
+              <ReportIcon />
+            </a>
+          )}
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} on GitHub`}
+              className="text-muted transition-colors hover:text-green"
+            >
+              <GithubIcon />
+            </a>
+          )}
+        </div>
       </div>
 
       {/* Tools */}

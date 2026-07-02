@@ -43,6 +43,7 @@ After validating across 5 complete hardware trials and achieving 60% full 3-offi
   {
     title: 'Dynamic Stability Cart',
     tools: ['STM32', 'C++', 'ICM-20948 IMU', 'SPI', 'Fusion 360', 'PI Control'],
+    report: 'https://drive.google.com/file/d/1eHVN0l3nveRTs42LLFuMdob11xppMMwQ/view',
     description:
       'Autonomous two-wheeled cart that traverses a rope-suspended bridge using a servo-actuated balancing rod and STM32 PI control. Offloading quaternion fusion to the IMU\'s onboard DMP cut control-loop latency from ~5 s to <100 ms, achieving <3° steady-state error.',
     details: {
