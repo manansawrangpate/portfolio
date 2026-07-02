@@ -98,7 +98,7 @@ export default function ProjectModal({
           <div className={`mb-7 grid gap-4 ${colClass}`}>
             {details.images.map(({ src, caption }) => (
               <figure key={src} className="flex flex-col">
-                <div className="h-36 overflow-hidden rounded-lg">
+                <div className="h-72 overflow-hidden rounded-lg">
                   <img
                     src={imgSrc(src)}
                     alt={caption ?? ''}
