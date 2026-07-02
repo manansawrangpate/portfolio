@@ -19,6 +19,24 @@ export default function Contact() {
         Open to January 2027 roles.
       </p>
 
+      <div className="mt-6 flex items-center justify-center gap-6">
+        <a
+          href="mailto:manansawrangpate1@gmail.com"
+          className="font-mono text-sm text-muted transition-colors hover:text-green"
+        >
+          manansawrangpate1@gmail.com
+        </a>
+        <span className="text-border">·</span>
+        <a
+          href="https://linkedin.com/in/manansawrangpate"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-sm text-muted transition-colors hover:text-green"
+        >
+          linkedin.com/in/manansawrangpate
+        </a>
+      </div>
+
       <footer className="mt-24 font-mono text-xs text-muted">
         2026
       </footer>
