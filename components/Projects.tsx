@@ -56,7 +56,11 @@ Control is a PI loop running on the MCU. We started with a full PID, but the der
 The chassis went through two full Fusion 360 design iterations. The first was an enclosed high-wall box structure — rigid, but too heavy and with a centre of mass too high for reliable single-axis balancing. The second moved to an open multi-level layout: heavy components mounted low, electronics elevated, and strict longitudinal symmetry enforced to keep the CoM on the rail axis. That symmetry turned out to be more important than expected — even a few millimetres of lateral offset introduced a lean bias the PI controller couldn't fully reject.
 
 Validation progressed from a dual-anchor string (more forgiving, less compliance) to a single-anchor attachment (much more sway and disturbance). Final testing confirmed repeatable autonomous bridge traversal under single-anchor conditions — the harder of the two configurations.`,
-      images: [],
+      images: [
+        { src: 'cart-system-diagram.png', caption: 'System Diagram (STM32 & connections)' },
+        { src: 'cart-deconstructed.png', caption: 'Deconstructed View of Cart' },
+        { src: 'cart-side-view.png', caption: 'Side View of Cart with Balancing Beam' },
+      ],
       links: [
         { label: 'Cart Overview', href: 'https://youtube.com/shorts/9KmyEsKY3r4' },
         { label: 'Demo Videos', href: 'https://drive.google.com/drive/folders/1WdUrfUVB392MwbkiYOgDXzXlVdmxJXj8' },
