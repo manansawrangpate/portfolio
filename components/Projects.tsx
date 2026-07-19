@@ -15,9 +15,9 @@ import { useReveal } from '@/lib/hooks';
 const PROJECTS: Project[] = [
   {
     title: 'Autonomous Mail Delivery Robot',
-    tools: ['ROS1/2', 'Python', 'Gazebo Harmonic', 'TurtleBot3 Waffle Pi'],
+    tools: ['ROS1', 'ROS2', 'Python', 'Gazebo Harmonic', 'TurtleBot3 Waffle Pi', 'Perception', 'Bayesian Filter'],
     description:
-      'TurtleBot3 Waffle Pi that autonomously navigates a multi-room office floor and delivers mail, using a 12-state Bayesian localization filter with a corridor-freeze strategy. Validated across 5 hardware trials, then ported to ROS2 Jazzy / Gazebo Harmonic.',
+      'Developed a Bayesian localization system enabling a TurtleBot3 Waffle Pi to autonomously navigate a closed-loop office map and deliver mail to target locations. The robot builds a probabilistic map from colored paper markers to identify its position and trigger delivery actions. Validated on real hardware, then extended to ROS2 Jazzy and Gazebo Harmonic simulation.',
     github: 'https://github.com/manansawrangpate/Bayesian-Localization-Robot/tree/main',
     details: {
       overview:
@@ -42,22 +42,23 @@ After validating across 5 complete hardware trials and achieving 60% full 3-offi
   },
   {
     title: 'Dynamic Stability Cart',
-    tools: ['STM32', 'C++', 'ICM-20948 IMU', 'SPI', 'Fusion 360', 'PI Control'],
+    tools: ['STM32', 'C++', 'IMU', 'SPI', 'Fusion 360', 'PID Control', 'Sensor Fusion'],
     report: 'https://drive.google.com/file/d/1eHVN0l3nveRTs42LLFuMdob11xppMMwQ/view',
     description:
-      'Autonomous two-wheeled cart that traverses a rope-suspended bridge using a servo-actuated balancing rod and STM32 PI control. Offloading quaternion fusion to the IMU\'s onboard DMP cut control-loop latency from ~5 s to <100 ms, achieving <3° steady-state error.',
+      'A two-wheeled robot that crosses a flexible rope bridge the way a tightrope walker does, using a mounted beam that shifts dynamically left and right to adjust its center of gravity and stay balanced. An STM32 PI controller reads IMU orientation to drive the beam servo, with quaternion fusion offloaded to the IMU\'s onboard DMP to cut control-loop latency from ~5 s to under 100 ms.',
     details: {
       overview:
-`The brief was deceptively simple: build a cart that can cross a rope-suspended bridge. In practice, that meant designing a system that could balance a two-wheeled vehicle on a 1 m single-axis rope rail while actually moving forward — a classic inverted-pendulum problem, but on an inherently compliant, swaying bridge rather than a rigid surface.
+`The problem we aimed to solve was inspired by tightrope walkers, who carry a long beam to lower their center of gravity and make balancing easier. Our robot replicates this: a two-wheeled cart that crosses a rope-suspended bridge by dynamically shifting a mounted beam left and right, adjusting its center of mass in real time to stay upright as it moves.
 
-The hardware core is an STM32 NUCLEO-G070RB driving a servo-actuated balancing rod, with orientation provided by an ICM-20948 9-DoF IMU over SPI. Our first firmware revision read raw accelerometer and gyroscope data and ran a Madgwick filter on the MCU to compute pitch. It worked — but the latency was brutal. Pitch corrections were arriving with up to 5 seconds of lag, causing tip-overs before the servo could react. The fix was offloading quaternion fusion entirely to the ICM-20948's onboard Digital Motion Processor (DMP). The DMP outputs ready-to-use quaternions directly at the SPI interface, cutting control-loop latency to under 100 ms — a greater than 95% reduction — and tip-overs from delayed correction stopped immediately.
+The hardware is built around an STM32 NUCLEO-G070RB driving a servo that actuates the balancing beam. Orientation comes from an ICM-20948 9-DoF IMU over SPI. Our first firmware revision ran a Madgwick filter directly on the MCU to compute pitch, but latency was around 5 seconds, long enough for the cart to tip before the servo could respond. We fixed this by offloading quaternion fusion to the IMU's onboard Digital Motion Processor (DMP), which outputs ready-to-use quaternions at the SPI interface. This cut control-loop latency to under 100 ms, a reduction of over 95%.
 
-Control is a PI loop running on the MCU. We started with a full PID, but the derivative term introduced sustained oscillations across both bridge configurations — the rope's compliance amplified Kd's response to high-frequency disturbances in a way that was difficult to tune out. Dropping D and retuning to Kp=1.5, Ki=0.02 gave clean convergence to less than 3° steady-state error.
+Control is a PI loop tuned to Kp=1.5, Ki=0.02. We initially used a full PID, but the derivative term amplified high-frequency disturbances from the rope's compliance, causing sustained oscillations that were difficult to tune out. Dropping the D term gave clean convergence to under 3 degrees of steady-state error.
 
-The chassis went through two full Fusion 360 design iterations. The first was an enclosed high-wall box structure — rigid, but too heavy and with a centre of mass too high for reliable single-axis balancing. The second moved to an open multi-level layout: heavy components mounted low, electronics elevated, and strict longitudinal symmetry enforced to keep the CoM on the rail axis. That symmetry turned out to be more important than expected — even a few millimetres of lateral offset introduced a lean bias the PI controller couldn't fully reject.
+The chassis went through two Fusion 360 design iterations. The first was a rigid enclosed box, but it was too heavy with a center of mass too high for reliable balancing. The second used an open multi-level layout with heavy components mounted low and strict longitudinal symmetry enforced. Even a few millimetres of lateral offset introduced a lean bias the PI controller couldn't fully compensate for.
 
-Validation progressed from a dual-anchor string (more forgiving, less compliance) to a single-anchor attachment (much more sway and disturbance). Final testing confirmed repeatable autonomous bridge traversal under single-anchor conditions — the harder of the two configurations.`,
+Testing progressed from a dual-anchor string to a single-anchor rope attachment, which is far more compliant and prone to sway. The cart achieved repeatable autonomous bridge traversal under both configurations.`,
       images: [
+        { src: 'Screenshot 2026-07-18 191648.png', caption: 'Overview of the Dynamic Stability Cart' },
         { src: 'cart-system-diagram.png', caption: 'System Diagram (STM32 & connections)' },
         { src: 'cart-deconstructed.png', caption: 'Deconstructed View of Cart' },
         { src: 'cart-side-view.png', caption: 'Side View of Cart with Balancing Beam' },
@@ -71,9 +72,9 @@ Validation progressed from a dual-anchor string (more forgiving, less compliance
   },
   {
     title: 'Current Sensing PCB',
-    tools: ['EAGLE PCB', 'PSpice', 'STM32G051', 'Op-Amp Design', 'Active LPF'],
+    tools: ['Eagle PCB', 'PSpice', 'STM32', 'Circuit Design', 'Low Pass Filter', 'C'],
     description:
-      'Custom 2-layer PCB for a DC power supply current-sense path — non-inverting summing op-amp topology maps 0–3.5 A to STM32 ADC range, with a 3rd-order active Butterworth LPF at 5 kHz providing −35 dB switching-noise rejection. R²=0.999 calibration linearity.',
+      'Designed and built a current sensing system for an adjustable DC power supply. Simulated the circuit in PSpice, then laid out a custom 2-layer PCB in EAGLE and integrated it with an STM32 and LCD display for real-time current readout and system verification.',
     github: 'https://github.com/manansawrangpate/dc-power-supply-current-sense',
     details: {
       overview:
@@ -107,11 +108,11 @@ export default function Projects() {
         ref={ref}
         className="reveal mx-auto max-w-6xl px-6 py-20"
       >
-        <h2 className="mb-10 font-display text-2xl font-semibold text-text">
+        <h2 className="mb-10 font-display text-3xl font-semibold text-white">
           Selected Projects
         </h2>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
           {PROJECTS.map((project) => (
             <ProjectCard
               key={project.title}

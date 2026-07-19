@@ -4,6 +4,9 @@ import { useReveal } from '@/lib/hooks';
 
 interface Entry {
   company: string;
+  url: string;
+  logo: string;
+  nameColor: string;
   team: string;
   role: string;
   date: string;
@@ -15,35 +18,44 @@ interface Entry {
 
 const ENTRIES: Entry[] = [
   {
-    company: 'Hedgehog Technologies',
-    team: 'Motor Control Firmware Team',
+    company: 'Hedgehog Technologies Inc.',
+    url: 'https://hedgehogtech.com/',
+    logo: 'https://www.google.com/s2/favicons?domain=hedgehogtech.com&sz=64',
+    nameColor: '#569cd6',
+    team: 'Motor Control R&D Team',
     role: 'Embedded Software Engineering Intern',
     date: 'May 2026 – Present',
     duration: '2 mo',
     location: 'Burnaby, BC',
     current: true,
     summary:
-      "Currently building embedded C firmware for motor controller boards on the NXP S32K144. Day-to-day is a mix of hardware bring-up and debugging — characterizing 3-phase SVPWM waveforms with an oscilloscope, tracing SPI bus faults down to component-level shorts, and diagnosing bring-up failures across board revisions through Altium schematics. One of my first shipped pieces was virtual EEPROM mapped to internal flash, which let the team eliminate a physical EEPROM chip from the board design entirely.",
+      "Building bare-metal embedded C firmware for motor controller boards, including hardware bring-up and debugging across board revisions, SMD soldering, and developing test software to validate new hardware.",
   },
   {
     company: 'York Region',
-    team: 'Process Optimization & Analytics',
+    url: 'https://www.york.ca/',
+    logo: 'https://www.google.com/s2/favicons?domain=york.ca&sz=64',
+    nameColor: '#4fc3f7',
+    team: 'Process Optimization and Analytics Team',
     role: 'Process Engineering Intern',
     date: 'May 2025 – April 2026',
     duration: '11 mo',
     location: 'Newmarket, ON',
     summary:
-      "Spent nearly a year embedded in the process engineering team at a regional wastewater facility. I built a two-stage Python ML pipeline (TF-IDF + Complement Naive Bayes) to triage thousands of monthly operator logs — 100% issue recall on validation and a 55% cut in manual review time. Beyond the ML work, I derived geometric volume models for SCADA integration, modelled pump cycles from indirect operational data to inform equipment sizing, and produced P&IDs and As-Built schematics from onsite inspections. Good introduction to how engineering decisions ripple through large infrastructure systems.",
+      "Built an ML-based log classifier to automate operator report triage, cutting manual review time. Developed geometric volume models for a new tank installation and analyzed operational datasets to inform EQ tank design.",
   },
   {
     company: 'Workplace Safety and Insurance Board',
+    url: 'https://www.wsib.ca/en',
+    logo: 'https://www.google.com/s2/favicons?domain=wsib.ca&sz=64',
+    nameColor: '#4ec9b0',
     team: 'Customer Care Team',
-    role: 'Customer Service',
+    role: 'Customer Service Representative',
     date: 'May 2024 – August 2024',
     duration: '4 mo',
     location: 'Toronto, ON',
     summary:
-      "Spent a summer on WSIB's customer care team, fielding inbound inquiries from injured workers and employers navigating Ontario's workplace safety insurance system — claims status, benefit entitlements, return-to-work timelines, and form submissions. Worked within WSIB's internal CRM to document interactions and escalate complex cases. Good first exposure to a high-stakes public service environment where the calls are never trivial.",
+      "Handled inbound inquiries from injured workers and employers on payment, healthcare, and policy matters, ensuring a high-quality experience. Responded to escalations, crisis situations, and security concerns with empathy and professionalism, achieving a 90%+ resolution rate.",
   },
 ];
 
@@ -56,42 +68,64 @@ export default function Experience() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
-      <h2 className="mb-12 font-display text-2xl font-semibold text-text">
+      <h2 className="mb-12 font-display text-3xl font-semibold text-white">
         Professional Experience
       </h2>
 
-      <div className="relative ml-2 border-l border-border pl-8">
+      <div className="relative ml-6 border-l border-border">
         {ENTRIES.map((entry, i) => (
-          <div key={entry.company + entry.date} className={i === ENTRIES.length - 1 ? '' : 'mb-14'}>
-            {/* Timeline node */}
-            <span
-              aria-hidden="true"
-              className={`absolute -left-[5px] h-2.5 w-2.5 rounded-full ${
-                entry.current ? 'bg-green' : 'bg-muted'
-              }`}
-              style={{
-                boxShadow: entry.current ? '0 0 8px rgba(79,195,247,0.7)' : 'none',
-              }}
-            />
-
-            {/* Company + team */}
-            <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
-              <span className="text-base font-semibold text-text">{entry.company}</span>
-              <span className="text-xs text-muted">{entry.team}</span>
+          <div key={entry.company + entry.date} className={`flex items-start gap-5 ${i < ENTRIES.length - 1 ? 'mb-14' : ''}`}>
+            {/* Logo — centered on the timeline line */}
+            <div className="-ml-6 shrink-0">
+              <a
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${entry.company} website`}
+              >
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-border bg-bg transition-colors hover:border-green">
+                  <img
+                    src={entry.logo}
+                    alt={`${entry.company} logo`}
+                    className="h-8 w-8 object-contain"
+                  />
+                </div>
+              </a>
             </div>
 
-            {/* Role · date · duration */}
-            <div className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-              <span className="font-mono text-[13px] text-green">{entry.role}</span>
-              <span className="text-xs text-muted">
-                · {entry.date}{entry.location ? ` · ${entry.location}` : ''} · ({entry.duration})
-              </span>
-            </div>
+            {/* Content */}
+            <div className="flex-1 pt-1">
+              {/* Company + team */}
+              <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg font-semibold text-text transition-opacity hover:opacity-80"
+                >
+                  {entry.company}
+                </a>
+                {entry.current && (
+                  <span className="rounded-full bg-green/10 px-2 py-0.5 text-[11px] font-medium text-green">
+                    Current
+                  </span>
+                )}
+                <span className="text-xs text-muted">{entry.team}</span>
+              </div>
 
-            {/* Narrative */}
-            <p className="max-w-2xl text-sm leading-7 text-muted">
-              {entry.summary}
-            </p>
+              {/* Role · date · duration */}
+              <div className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="font-mono text-sm" style={{ color: entry.nameColor }}>{entry.role}</span>
+                <span className="text-[13px] text-muted">
+                  · {entry.date}{entry.location ? ` · ${entry.location}` : ''} · ({entry.duration})
+                </span>
+              </div>
+
+              {/* Narrative */}
+              <p className="max-w-2xl text-base leading-7 text-muted">
+                {entry.summary}
+              </p>
+            </div>
           </div>
         ))}
       </div>

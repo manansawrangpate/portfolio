@@ -1,16 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
-const NAV_LINKS = [
-  { label: 'Home', href: `${BASE}/` },
-  { label: 'Projects', href: `${BASE}/#projects` },
-  { label: 'About', href: `${BASE}/about/` },
-  { label: 'Experience', href: `${BASE}/#experience` },
-  { label: 'Contact', href: `${BASE}/#contact` },
-];
+const SECTIONS = ['home', 'projects', 'experience', 'contact'];
 
 const SOCIALS = [
   {
@@ -43,7 +39,11 @@ const SOCIALS = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+
+  const onAboutPage = pathname?.includes('/about');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -51,6 +51,34 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (onAboutPage) return;
+    const observers: IntersectionObserver[] = [];
+    SECTIONS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { rootMargin: '-40% 0px -55% 0px' }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, [onAboutPage]);
+
+  const linkClass = (active: boolean) =>
+    `relative font-mono text-sm transition-colors duration-200 ${
+      active ? 'text-green' : 'text-muted hover:text-green'
+    }`;
+
+  const HASH_LINKS = [
+    { label: 'Home',       href: `${BASE}/`,            section: 'home' },
+    { label: 'Projects',   href: `${BASE}/#projects`,   section: 'projects' },
+    { label: 'Experience', href: `${BASE}/#experience`, section: 'experience' },
+    { label: 'Contact',    href: `${BASE}/#contact`,    section: 'contact' },
+  ];
 
   return (
     <header
@@ -64,7 +92,7 @@ export default function Navbar() {
         {/* Full name — left */}
         <a
           href="#home"
-          className="font-display text-sm font-semibold text-text transition-colors hover:text-green"
+          className="font-display text-base font-semibold text-text transition-colors hover:text-green"
         >
           Manan Sawrangpate
         </a>
@@ -72,16 +100,27 @@ export default function Navbar() {
         {/* Nav links + social icons — right */}
         <div className="flex items-center gap-6">
           <ul className="hidden items-center gap-6 md:flex">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="font-mono text-[13px] text-muted transition-colors hover:text-green"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+            {HASH_LINKS.map((link) => {
+              const active = !onAboutPage && activeSection === link.section;
+              return (
+                <li key={link.href}>
+                  <a href={link.href} className={linkClass(active)}>
+                    {link.label}
+                    {active && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-px bg-green rounded-full" />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+            <li>
+              <Link href="/about/" className={linkClass(!!onAboutPage)}>
+                About
+                {onAboutPage && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-px bg-green rounded-full" />
+                )}
+              </Link>
+            </li>
           </ul>
 
           <div className="flex items-center gap-4">

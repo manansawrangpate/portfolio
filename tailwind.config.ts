@@ -20,9 +20,9 @@ const config: Config = {
         pink: 'var(--pink)',
       },
       fontFamily: {
-        display: ['var(--font-space-grotesk)', 'sans-serif'],
+        display: ['var(--font-poppins)', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'monospace'],
-        sans: ['var(--font-inter)', 'sans-serif'],
+        sans: ['var(--font-poppins)', 'sans-serif'],
       },
       borderRadius: {
         badge: '8px',

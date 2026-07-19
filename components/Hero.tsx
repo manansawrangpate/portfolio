@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export default function Hero() {
@@ -13,6 +15,7 @@ export default function Hero() {
         src={`${BASE}/toronto-at-dusk.jpg`}
         alt=""
         aria-hidden="true"
+        loading="eager"
         className="absolute inset-0 h-full w-full object-cover"
       />
 
@@ -21,7 +24,7 @@ export default function Hero() {
 
       {/* Info card */}
       <div
-        className="fade-in relative z-10 flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 md:flex-row"
+        className="fade-in relative z-10 flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 md:flex-row"
         style={{
           background: 'rgba(28, 28, 28, 0.90)',
           backdropFilter: 'blur(12px)',
@@ -47,15 +50,15 @@ export default function Hero() {
             className="font-display text-4xl font-bold tracking-tight text-text sm:text-5xl"
             style={{ textShadow: '0 0 40px rgba(79,195,247,0.18)' }}
           >
-            I&apos;m Manan!
+            I&apos;m Manan
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-text">
+          <p className="mt-3 text-base leading-6 text-text">
             I&apos;m currently an undergrad studying Robotics Engineering at the University of Toronto!
           </p>
 
           {/* Contact links */}
-          <div className="mt-5 space-y-2 text-sm">
+          <div className="mt-5 space-y-2 text-base">
             <div className="flex flex-wrap items-baseline gap-1.5">
               <span className="font-semibold text-green">Email:</span>
               <a
@@ -90,25 +93,25 @@ export default function Hero() {
           </div>
 
           {/* CTAs */}
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex gap-3">
             <a
               href="#projects"
-              className="rounded-badge bg-green px-5 py-2.5 text-sm font-semibold text-[#1e1e1e] transition-transform duration-200 hover:-translate-y-0.5"
+              className="whitespace-nowrap rounded-badge bg-green px-5 py-2.5 text-sm font-semibold text-[#1e1e1e] transition-transform duration-200 hover:-translate-y-0.5"
             >
               See my work
             </a>
-            <a
-              href={`${BASE}/about/`}
-              className="rounded-badge border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors duration-200 hover:border-green hover:text-green"
+            <Link
+              href="/about/"
+              className="whitespace-nowrap rounded-badge border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors duration-200 hover:border-green hover:text-green"
             >
               About Me
-            </a>
-            <a
-              href={`${BASE}/resume/`}
-              className="rounded-badge border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors duration-200 hover:border-green hover:text-green"
+            </Link>
+            <Link
+              href="/resume/"
+              className="whitespace-nowrap rounded-badge border border-border px-5 py-2.5 text-sm font-semibold text-text transition-colors duration-200 hover:border-green hover:text-green"
             >
               Resume &amp; Portfolio
-            </a>
+            </Link>
           </div>
         </div>
       </div>

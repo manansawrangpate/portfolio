@@ -29,6 +29,7 @@ function PhotoShuffle() {
           key={photo.src}
           src={photo.src}
           alt={photo.alt}
+          loading="lazy"
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
             i === idx ? 'opacity-100' : 'opacity-0'
           }`}
@@ -115,30 +116,41 @@ export default function About() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-20"
     >
-      <h2 className="mb-10 font-display text-2xl font-semibold text-text">About Me</h2>
+      <h2 className="mb-10 font-display text-3xl font-semibold text-white">About Me</h2>
 
       {/* Top: bio + photo */}
       <div className="mb-16 grid gap-10 lg:grid-cols-[1fr_300px]">
         {/* Left: bio + personal */}
         <div className="space-y-6 text-base leading-7 text-muted">
           <p>
-            I&apos;m a third-year Engineering Science student at the University of
-            Toronto, majoring in Robotics Engineering with minors in Engineering
-            Business and Artificial Intelligence.
+            I&apos;m a third-year{' '}
+            <a
+              href="https://engsci.utoronto.ca/program/what-is-engsci/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green underline-offset-4 hover:underline"
+            >
+              Engineering Science
+            </a>{' '}
+            student at the University of Toronto, majoring in Robotics Engineering
+            with minors in Engineering Business and Artificial Intelligence.
           </p>
           <p>
             My interests span autonomous systems, hardware, embedded software and
-            firmware, and control theory — all areas that come together in robotics.
-            I&apos;m drawn to building robotic and autonomous systems that make a real
-            difference in human quality of life.
+            firmware, and controls, all important to robotics. I enjoy solving
+            difficult problems across a variety of fields, and my goal is to build
+            robotic and autonomous systems that improve human quality of life.
           </p>
 
           <hr className="border-border" />
 
           <p>
-            I grew up in Alberta and developed a love for hiking and biking in the
-            Rockies. I&apos;ve been lucky to travel broadly and pick up experiences along
-            the way. Outside of engineering, I play guitar — you can listen to some
+            Outside of professional interests, I&apos;m a proud Albertan and an even
+            prouder Canadian. I grew up in Edmonton and developed a passion for
+            hiking and camping in the Rockies, and I really enjoy biking with
+            friends. I&apos;ve been lucky to travel abroad and have visited Thailand,
+            Singapore, Egypt, Italy, and the US many times. Spain is next on the
+            list! Outside of engineering, I play guitar - you can check out some
             recordings on my{' '}
             <a
               href="https://www.youtube.com/@sawrangpatesounds"
@@ -159,7 +171,7 @@ export default function About() {
       </div>
 
       {/* Skills */}
-      <h3 className="mb-8 font-mono text-sm uppercase tracking-wider text-muted">
+      <h3 className="mb-8 font-mono text-base uppercase tracking-wider text-muted">
         Skills &amp; Technologies
       </h3>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

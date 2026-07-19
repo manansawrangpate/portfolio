@@ -4,8 +4,8 @@
 
 :root {
   --bg: #1e1e1e;
-  --surface: #252526;
-  --border: #3e3e42;
+  --surface: #252630;
+  --border: #32333f;
   --green: #4fc3f7;
   --blue: #569cd6;
   --text: #d4d4d4;
@@ -26,8 +26,8 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 16px;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 17px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -67,7 +67,7 @@ body {
 }
 .fade-in {
   opacity: 0;
-  animation: fade-in-up 0.5s ease forwards;
+  animation: fade-in-up 0.8s ease forwards;
 }
 
 /* ---- Typewriter cursor blink ---- */
@@ -89,7 +89,7 @@ body {
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 600ms ease, transform 600ms ease;
+  transition: opacity 700ms ease, transform 700ms ease;
   will-change: opacity, transform;
 }
 .reveal.is-visible {
@@ -115,19 +115,28 @@ body {
   }
 }
 
+/* ---- Marquee scroll ---- */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
 /* ---- Utility: tech badge ---- */
 .badge {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 12px;
+  font-size: 13px;
   padding: 3px 8px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text);
+  color: var(--blue);
   white-space: nowrap;
-  transition: border-color 200ms ease, color 200ms ease;
-}
-.badge:hover {
-  border-color: var(--green);
-  color: var(--green);
 }

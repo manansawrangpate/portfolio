@@ -11,18 +11,18 @@ export default function Contact() {
       ref={ref}
       className="reveal mx-auto max-w-6xl px-6 py-24 text-center"
     >
-      <h2 className="mb-5 font-mono text-sm text-green">
-        &lt;GetInTouch/&gt;
+      <h2 className="mb-5 font-display text-3xl font-semibold text-white">
+        Get in Touch
       </h2>
 
-      <p className="mx-auto max-w-xl text-base leading-7 text-muted">
-        Open to January 2027 roles.
+      <p className="mx-auto max-w-xl text-lg leading-7 text-muted">
+        I&apos;m always happy to connect or have a chat.
       </p>
 
       <div className="mt-6 flex items-center justify-center gap-6">
         <a
           href="mailto:manansawrangpate1@gmail.com"
-          className="font-mono text-sm text-muted transition-colors hover:text-green"
+          className="font-mono text-base text-muted transition-colors hover:text-green"
         >
           manansawrangpate1@gmail.com
         </a>
@@ -31,7 +31,7 @@ export default function Contact() {
           href="https://linkedin.com/in/manansawrangpate"
           target="_blank"
           rel="noopener noreferrer"
-          className="font-mono text-sm text-muted transition-colors hover:text-green"
+          className="font-mono text-base text-muted transition-colors hover:text-green"
         >
           linkedin.com/in/manansawrangpate
         </a>

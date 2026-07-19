@@ -1,3 +1,55 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+function imgSrc(src: string): string {
+  return src.startsWith('http') ? src : `${BASE}/${src}`;
+}
+
+function CardPhotoSlider({ images }: { images: ProjectImage[] }) {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const t = setInterval(() => setIdx(i => (i + 1) % images.length), 3500);
+    return () => clearInterval(t);
+  }, [images.length]);
+
+  if (!images.length) return null;
+
+  return (
+    <div className="relative mb-4 h-44 w-full overflow-hidden rounded-lg bg-bg">
+      {images.map((img, i) => (
+        <img
+          key={img.src}
+          src={imgSrc(img.src)}
+          alt={img.caption ?? ''}
+          loading="lazy"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            i === idx ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+      {images.length > 1 && (
+        <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              aria-label={`Photo ${i + 1}`}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                i === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/40'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function GithubIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -46,10 +98,13 @@ export default function ProjectCard({
   onOpenDetails: () => void;
 }) {
   return (
-    <article className="group flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-200 hover:border-green hover:shadow-[0_0_28px_rgba(79,195,247,0.12)]">
+    <article className="group flex h-full flex-col rounded-card border border-border bg-surface p-5 transition-all duration-300 hover:-translate-y-1">
+      {/* Photo slider */}
+      <CardPhotoSlider images={project.details.images} />
+
       {/* Title row */}
       <div className="mb-2 flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg font-semibold text-text leading-snug">
+        <h3 className="font-display text-xl font-semibold text-white leading-snug">
           {project.title}
         </h3>
         <div className="flex shrink-0 items-center gap-2">
@@ -78,20 +133,26 @@ export default function ProjectCard({
         </div>
       </div>
 
-      {/* Tools */}
-      <p className="font-mono text-[11px] text-muted">
-        {project.tools.join(' · ')}
-      </p>
-
       {/* Description */}
-      <p className="mt-3 flex-1 text-sm leading-6 text-muted">
+      <p className="mt-2 flex-1 text-base leading-6 text-[#a0a0a0]">
         {project.description}
       </p>
+
+      {/* Tools — auto-scrolling marquee */}
+      <div className="mt-4 overflow-hidden">
+        <div className="marquee-track gap-1.5">
+          {[...project.tools, ...project.tools].map((tool, i) => (
+            <span key={i} className="badge shrink-0 mr-1.5">
+              {tool}
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* View Details */}
       <button
         onClick={onOpenDetails}
-        className="mt-5 self-start font-mono text-xs text-green transition-colors hover:text-text"
+        className="mt-4 self-start font-mono text-sm text-text transition-colors hover:text-green"
       >
         + View Details
       </button>

@@ -1,9 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { Project } from './ProjectCard';
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+function imgSrc(src: string): string {
+  return src.startsWith('http') ? src : `${BASE}/${src}`;
+}
 
 function GithubIcon() {
   return (
@@ -13,8 +17,117 @@ function GithubIcon() {
   );
 }
 
-function imgSrc(src: string): string {
-  return src.startsWith('http') ? src : `${BASE}/${src}`;
+function ChevronLeft() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  );
+}
+
+function ChevronRight() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  );
+}
+
+function ImageCarousel({ images }: { images: { src: string; caption?: string }[] }) {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const prev = useCallback(() => {
+    setIdx(i => (i - 1 + images.length) % images.length);
+    setPaused(true);
+  }, [images.length]);
+
+  const next = useCallback(() => {
+    setIdx(i => (i + 1) % images.length);
+    setPaused(true);
+  }, [images.length]);
+
+  useEffect(() => {
+    if (paused || images.length <= 1) return;
+    const t = setInterval(() => setIdx(i => (i + 1) % images.length), 4000);
+    return () => clearInterval(t);
+  }, [paused, images.length]);
+
+  // Resume auto-advance 6 s after last manual interaction
+  useEffect(() => {
+    if (!paused) return;
+    const t = setTimeout(() => setPaused(false), 6000);
+    return () => clearTimeout(t);
+  }, [paused, idx]);
+
+  if (!images.length) return null;
+
+  return (
+    <div className="mb-7">
+      {/* Image area */}
+      <div className="relative overflow-hidden rounded-xl bg-bg" style={{ height: '340px' }}>
+        {images.map((img, i) => (
+          <img
+            key={img.src}
+            src={imgSrc(img.src)}
+            alt={img.caption ?? ''}
+            loading="lazy"
+            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-500 ${
+              i === idx ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+
+        {/* Arrows */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prev}
+              aria-label="Previous photo"
+              className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white/80 transition-all hover:bg-black/75 hover:text-white"
+            >
+              <ChevronLeft />
+            </button>
+            <button
+              onClick={next}
+              aria-label="Next photo"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white/80 transition-all hover:bg-black/75 hover:text-white"
+            >
+              <ChevronRight />
+            </button>
+          </>
+        )}
+
+        {/* Counter */}
+        {images.length > 1 && (
+          <span className="absolute right-3 bottom-3 rounded-full bg-black/50 px-2.5 py-0.5 font-mono text-xs text-white/70">
+            {idx + 1} / {images.length}
+          </span>
+        )}
+      </div>
+
+      {/* Caption + dots */}
+      <div className="mt-3 flex flex-col items-center gap-2">
+        {images[idx].caption && (
+          <p className="text-center text-sm italic text-muted">{images[idx].caption}</p>
+        )}
+        {images.length > 1 && (
+          <div className="flex gap-1.5">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => { setIdx(i); setPaused(true); }}
+                aria-label={`Photo ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === idx ? 'w-5 bg-green' : 'w-1.5 bg-muted/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function ProjectModal({
@@ -25,7 +138,9 @@ export default function ProjectModal({
   onClose: () => void;
 }) {
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
@@ -35,7 +150,6 @@ export default function ProjectModal({
   }, [onClose]);
 
   const { details } = project;
-  const colClass = details.images.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-16">
@@ -78,7 +192,7 @@ export default function ProjectModal({
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-sm text-muted transition-colors hover:text-green"
+                className="font-mono text-sm text-text transition-colors hover:text-green"
               >
                 {label} ↗
               </a>
@@ -93,30 +207,11 @@ export default function ProjectModal({
           </div>
         </div>
 
-        {/* Images — shown ABOVE the overview text */}
-        {details.images.length > 0 && (
-          <div className={`mb-7 grid gap-4 ${colClass}`}>
-            {details.images.map(({ src, caption }) => (
-              <figure key={src} className="flex flex-col">
-                <div className="h-72 overflow-hidden rounded-lg">
-                  <img
-                    src={imgSrc(src)}
-                    alt={caption ?? ''}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-                {caption && (
-                  <figcaption className="mt-2 text-center text-xs italic text-muted">
-                    {caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
-        )}
+        {/* Image carousel */}
+        <ImageCarousel images={details.images} />
 
         {/* Overview */}
-        <div className="space-y-4 text-sm leading-7 text-muted">
+        <div className="space-y-4 text-base leading-7 text-[#a0a0a0]">
           {details.overview.split('\n\n').map((para, i) => (
             <p key={i}>{para}</p>
           ))}

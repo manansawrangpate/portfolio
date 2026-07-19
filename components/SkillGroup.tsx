@@ -25,7 +25,7 @@ export default function SkillGroup({
           className={`inline-block h-2 w-2 rounded-full ${DOT_CLASS[dot]}`}
           aria-hidden="true"
         />
-        <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
+        <span className="font-mono text-xs uppercase tracking-wider text-muted">
           {label}
         </span>
       </div>

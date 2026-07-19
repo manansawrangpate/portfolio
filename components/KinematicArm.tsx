@@ -15,7 +15,7 @@ const JOINT_CONFIG = [
   { freq: 1.3, amp: 0.6, phase: 3.0, base: -0.3 },
 ];
 
-const GREEN = '#00c896';
+const GREEN = '#50fa7b';
 
 export default function KinematicArm() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
