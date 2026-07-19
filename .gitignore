@@ -6,3 +6,5 @@ out
 .vercel
 next-env.d.ts
 .env*.local
+.claude/
+README.md
