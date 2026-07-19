@@ -58,34 +58,34 @@ const SKILL_GROUPS = [
     dot: 'green' as const,
     skills: [
       'ROS2 Jazzy', 'ROS1', 'Gazebo Harmonic', 'TurtleBot3',
-      'Motion Planning', 'Bayesian Filtering', 'Sensor Fusion',
-      'Localization', 'State Machines', 'SLAM',
+      'Autonomous Navigation', 'Motion Planning', 'Bayesian Filtering',
+      'Sensor Fusion', 'Localization', 'State Machines', 'Multithreading',
     ],
   },
   {
     label: 'Embedded & Firmware',
     dot: 'blue' as const,
     skills: [
-      'Embedded C/C++', 'STM32', 'NXP S32K144', 'SPI', 'I2C', 'UART', 'CAN',
+      'Embedded C/C++', 'STM32', 'NXP S32K144', 'SPI', 'I2C', 'CAN', 'Modbus',
       'ADC', 'PWM', 'SVPWM', 'FOC', 'Virtual EEPROM', 'Flash HAL',
-      'IMU / DMP', 'PI Control', 'Motor Control',
+      'IMU / DMP', 'PID Control', 'Motor Control', 'Actuators / Servos',
     ],
   },
   {
     label: 'Electronics & PCB',
     dot: 'purple' as const,
     skills: [
-      'EAGLE PCB', 'Altium', 'PSpice', 'Op-Amp Design', 'Active Filters',
-      'LPF Design', 'Current Sensing', '3-Phase Inverter',
-      'Oscilloscope', 'Signal Probing', 'Soldering',
+      'EAGLE PCB', 'Altium', 'PSpice', 'Op-Amp Design',
+      'Low Pass Filter Design', 'Current Sensing', '3-Phase Inverter',
+      'Oscilloscope', 'Signal Probing', 'Soldering', 'Multimeter', 'Electrical Assembly',
     ],
   },
   {
     label: 'Software & Algorithms',
     dot: 'yellow' as const,
     skills: [
-      'Python', 'C/C++', 'MATLAB / Simulink', 'Linux', 'Bash',
-      'Multithreading', 'TF-IDF', 'Naive Bayes / NLP', 'Git',
+      'Python', 'C/C++', 'Object Oriented Programming', 'MATLAB / Simulink',
+      'Linux / Ubuntu', 'Bash', 'Git / GitHub', 'TF-IDF',
     ],
   },
   {
@@ -101,8 +101,8 @@ const SKILL_GROUPS = [
     label: 'Dev Tools & Platforms',
     dot: 'white' as const,
     skills: [
-      'Git', 'VS Code', 'Visual Studio', 'S32K Design Studio',
-      'Linux CLI', 'Excel Modelling', 'Bluebeam / Visio',
+      'Visual Studio', 'S32K Design Studio', 'Jira',
+      'Excel Modelling', 'Bluebeam / Visio',
     ],
   },
 ];

@@ -212,9 +212,21 @@ export default function ProjectModal({
 
         {/* Overview */}
         <div className="space-y-4 text-base leading-7 text-[#a0a0a0]">
-          {details.overview.split('\n\n').map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+          {details.overview.split('\n\n').map((para, i) => {
+            const linkMap = Object.fromEntries(details.links.map(l => [l.label, l.href]));
+            const parts = para.split(/\[([^\]]+)\]/g);
+            return (
+              <p key={i}>
+                {parts.map((part, j) =>
+                  j % 2 === 1 && linkMap[part] ? (
+                    <a key={j} href={linkMap[part]} target="_blank" rel="noopener noreferrer" className="text-green underline-offset-2 hover:underline">
+                      {part} ↗
+                    </a>
+                  ) : part
+                )}
+              </p>
+            );
+          })}
         </div>
       </div>
     </div>
